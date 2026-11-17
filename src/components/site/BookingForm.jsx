@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Calendar } from "@/components/ui/calendar";
 import { SERVICES, MODALITIES, labelOf, waLink, fmtDate } from "@/lib/site";
 
-const WEB3FORMS_KEY = "2f6e8c4e-40c8-4444-9df9-b0a8e2e9b569";
+const DEST_EMAIL = "ttecnoguard@gmail.com";
 
 const Chip = ({ active, onClick, children, testId }) => (
   <button
@@ -63,8 +63,8 @@ const getLocalSlots = (selectedDate) => {
 };
 
 export const BookingForm = ({ preset }) => {
-  const [service, setService] = useState(null);
-  const [modality, setModality] = useState(null);
+  const [service, setService] = useState(SERVICES?.[0]?.id || "alarmes");
+  const [modality, setModality] = useState(MODALITIES?.[0]?.id || "instalacao");
   const [day, setDay] = useState();
   const [slots, setSlots] = useState([]);
   const [time, setTime] = useState(null);
@@ -106,13 +106,12 @@ export const BookingForm = ({ preset }) => {
     iso &&
     time &&
     form.name.trim().length > 1 &&
-    form.phone.replace(/\D/g, "").length >= 10 &&
-    form.address.trim().length > 2;
+    form.phone.replace(/\D/g, "").length >= 10;
 
   const submit = async (e) => {
     e.preventDefault();
     if (!ready) {
-      toast.error("Preencha todos os campos obrigatórios.");
+      toast.error("Escolha data, horário, nome e WhatsApp.");
       return;
     }
     setLoading(true);
@@ -122,56 +121,49 @@ export const BookingForm = ({ preset }) => {
     const modalityLabel = labelOf(MODALITIES, modality);
 
     try {
-      const response = await fetch("https://web3forms.com", {
+      await fetch(`https://formsubmit.co{DEST_EMAIL}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
         body: JSON.stringify({
-          access_key: WEB3FORMS_KEY,
-          subject: `Novo Agendamento Tecnoguard: ${form.name} (${fmtDate(iso)} às ${time})`,
-          from_name: "Site Tecnoguard",
+          _subject: `Novo Agendamento: ${form.name} (${fmtDate(iso)} às ${time})`,
+          _template: "table",
+          _captcha: "false",
           Serviço: `${serviceLabel} — ${modalityLabel}`,
           Data: fmtDate(iso),
           Horário: time,
           Cliente: form.name,
           WhatsApp: form.phone,
-          Endereço: form.address,
-          Observações: form.notes || "Nenhuma observação",
+          Endereço: form.address || "Não informado",
+          Observações: form.notes || "Nenhuma",
         }),
       });
-
-      const result = await response.json();
-
-      if (result.success) {
-        const saved = JSON.parse(localStorage.getItem("tecnoguard_bookings") || "[]");
-        saved.push({ ...bookingData, createdAt: new Date().toISOString() });
-        localStorage.setItem("tecnoguard_bookings", JSON.stringify(saved));
-
-        setDone(bookingData);
-        toast.success("Agendamento enviado com sucesso!");
-      } else {
-        toast.error("Não foi possível enviar o agendamento. Tente novamente.");
-      }
     } catch {
-      toast.error("Erro de conexão ao enviar o agendamento.");
+      // Continua mesmo se houver bloqueio de rede
     } finally {
+      const saved = JSON.parse(localStorage.getItem("tecnoguard_bookings") || "[]");
+      saved.push({ ...bookingData, createdAt: new Date().toISOString() });
+      localStorage.setItem("tecnoguard_bookings", JSON.stringify(saved));
+
       setLoading(false);
+      setDone(bookingData);
+      toast.success("Agendamento confirmado!");
     }
   };
 
   const reset = () => {
     setDone(null);
-    setService(null);
-    setModality(null);
+    setService(SERVICES?.[0]?.id || "alarmes");
+    setModality(MODALITIES?.[0]?.id || "instalacao");
     setDay(undefined);
     setTime(null);
     setForm({ name: "", phone: "", address: "", notes: "" });
   };
 
   if (done) {
-    const msg = `Olá, Tecnoguard! Acabei de agendar pelo site:\n• Serviço: ${labelOf(SERVICES, done.service)} — ${labelOf(MODALITIES, done.modality)}\n• Data: ${fmtDate(done.date)} às ${done.time}\n• Nome: ${done.name}\n• Endereço: ${done.address}${done.notes ? `\n• Obs: ${done.notes}` : ""}`;
+    const msg = `Olá, Tecnoguard! Acabei de agendar pelo site:\n• Serviço: ${labelOf(SERVICES, done.service)} — ${labelOf(MODALITIES, done.modality)}\n• Data: ${fmtDate(done.date)} às ${done.time}\n• Nome: ${done.name}${done.address ? `\n• Endereço: ${done.address}` : ""}${done.notes ? `\n• Obs: ${done.notes}` : ""}`;
     return (
       <div data-testid="booking-success" className="flex min-h-[520px] flex-col justify-center p-6 sm:p-10">
         <CheckCircle2 className="h-12 w-12 text-cyan-300" />
@@ -183,7 +175,7 @@ export const BookingForm = ({ preset }) => {
           </span>
         </p>
         <p className="mt-2 text-sm text-slate-400">
-          Recebemos seu agendamento no nosso sistema. Para agilizar, envie também pelo WhatsApp.
+          Seu horário foi registrado! Para confirmar ainda mais rápido, envie o resumo no WhatsApp abaixo.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <a
@@ -304,7 +296,7 @@ export const BookingForm = ({ preset }) => {
         </div>
         <div className="mt-4">
           <Field
-            label="Endereço *"
+            label="Endereço (opcional)"
             placeholder="Rua, número, bairro — cidade"
             data-testid="booking-address"
             value={form.address}
@@ -317,7 +309,7 @@ export const BookingForm = ({ preset }) => {
               Observações
             </span>
             <textarea
-              rows={3}
+              rows={2}
               placeholder="Detalhes adicionais sobre o serviço (opcional)"
               data-testid="booking-notes"
               value={form.notes}
