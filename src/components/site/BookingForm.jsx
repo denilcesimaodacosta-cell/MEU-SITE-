@@ -278,4 +278,70 @@ export const BookingForm = ({ preset }) => {
                       {s.time}
                     </button>
                   ))}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </Step>
 
+      <Step n="03" title="Seus dados">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field
+            label="Nome *"
+            placeholder="Seu nome"
+            data-testid="booking-name"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+          />
+          <Field
+            label="WhatsApp *"
+            placeholder="(49) 99999-9999"
+            data-testid="booking-phone"
+            value={form.phone}
+            onChange={(e) => setForm({ ...form, phone: maskPhone(e.target.value) })}
+          />
+        </div>
+        <div className="mt-4">
+          <Field
+            label="Endereço *"
+            placeholder="Rua, número, bairro — cidade"
+            data-testid="booking-address"
+            value={form.address}
+            onChange={(e) => setForm({ ...form, address: e.target.value })}
+          />
+        </div>
+        <div className="mt-4">
+          <label className="block">
+            <span className="mb-1.5 block font-mono text-[11px] uppercase tracking-widest text-slate-400">
+              Observações
+            </span>
+            <textarea
+              rows={3}
+              placeholder="Detalhes adicionais sobre o serviço (opcional)"
+              data-testid="booking-notes"
+              value={form.notes}
+              onChange={(e) => setForm({ ...form, notes: e.target.value })}
+              className="w-full rounded-sm border border-white/10 bg-[#070B14] px-4 py-3 text-base text-white outline-none transition-colors placeholder:text-slate-500 focus:border-[#0088FF]"
+            />
+          </label>
+        </div>
+
+        <button
+          type="submit"
+          disabled={loading}
+          data-testid="booking-submit"
+          className="mt-6 flex w-full items-center justify-center gap-2 rounded-sm bg-[#0088FF] px-6 py-4 font-semibold uppercase tracking-wider text-white shadow-[0_0_24px_rgba(0,136,255,0.35)] transition-all hover:bg-[#0077E6] disabled:opacity-50"
+        >
+          {loading ? (
+            <>
+              <Loader2 className="h-5 w-5 animate-spin" /> Enviando...
+            </>
+          ) : (
+            "Confirmar agendamento"
+          )}
+        </button>
+      </Step>
+    </form>
+  );
+};
