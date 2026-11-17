@@ -120,25 +120,27 @@ export const BookingForm = ({ preset }) => {
     const serviceLabel = labelOf(SERVICES, service);
     const modalityLabel = labelOf(MODALITIES, modality);
 
+    const infoServico = `${modalityLabel}${form.address ? ` | End: ${form.address}` : ""}${form.notes ? ` | Obs: ${form.notes}` : ""}`;
+    const isAlarme = service.toLowerCase().includes("alarm") || serviceLabel.toLowerCase().includes("alarm");
+    const isCamera = service.toLowerCase().includes("cam") || serviceLabel.toLowerCase().includes("câm") || serviceLabel.toLowerCase().includes("cam");
+
+    const payload = {
+      data: fmtDate(iso),
+      horario: time,
+      cliente: form.name,
+      contato: form.phone,
+      alarme: isAlarme ? infoServico : (!isCamera ? `${serviceLabel} (${infoServico})` : "-"),
+      cameras: isCamera ? infoServico : "-"
+    };
+
     try {
-      await fetch(`https://formsubmit.co{DEST_EMAIL}`, {
+      await fetch("https://script.google.com/macros/s/AKfycbySEgf38Pwd3FX3mrqdHvGPZY9XpM7jzReHVrF7y2wlavaM3MB3PtyqSx5jmXIWTuVhPQ/exec", {
         method: "POST",
+        mode: "no-cors",
         headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
+          "Content-Type": "text/plain;charset=utf-8",
         },
-        body: JSON.stringify({
-          _subject: `Novo Agendamento: ${form.name} (${fmtDate(iso)} às ${time})`,
-          _template: "table",
-          _captcha: "false",
-          Serviço: `${serviceLabel} — ${modalityLabel}`,
-          Data: fmtDate(iso),
-          Horário: time,
-          Cliente: form.name,
-          WhatsApp: form.phone,
-          Endereço: form.address || "Não informado",
-          Observações: form.notes || "Nenhuma",
-        }),
+        body: JSON.stringify(payload),
       });
     } catch {
       // Continua mesmo se houver bloqueio de rede
