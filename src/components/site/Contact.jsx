@@ -1,4 +1,4 @@
-import { Instagram, Mail, MapPin, MessageCircle, ArrowUpRight } from "lucide-react";
+import { Instagram, Mail, MapPin, MessageCircle, Wrench, Receipt, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Reveal, Overline } from "./Reveal";
 import { Mark } from "./Mark";
@@ -6,6 +6,8 @@ import { waLink, PHONE_LABEL, EMAIL, INSTAGRAM } from "@/lib/site";
 
 const ITEMS = [
   { id: "whatsapp", icon: MessageCircle, label: "WhatsApp", value: PHONE_LABEL, href: waLink("Olá, Tecnoguard!") },
+  { id: "tecnica", icon: Wrench, label: "Área Técnica", value: "(49) 99926-0800", href: "https://wa.me!" },
+  { id: "financeiro", icon: Receipt, label: "Financeiro", value: "(49) 99114-5806", href: "https://wa.me!" },
   { id: "instagram", icon: Instagram, label: "Instagram", value: `@${INSTAGRAM}`, href: `https://instagram.com/${INSTAGRAM}` },
   { id: "email", icon: Mail, label: "E-mail", value: EMAIL, href: `mailto:${EMAIL}` },
   { id: "local", icon: MapPin, label: "Atendimento", value: "Chapecó — SC e região", href: null },
@@ -17,7 +19,7 @@ export const Contact = () => (
       <Reveal>
         <Overline>// 04 — Contato</Overline>
       </Reveal>
-      <div className="mt-8 grid border-t border-white/10 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-8 grid border-t border-white/10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
         {ITEMS.map((it, i) => {
           const inner = (
             <>
@@ -26,18 +28,18 @@ export const Contact = () => (
                 {it.href && <ArrowUpRight className="h-5 w-5 text-slate-500 transition-[transform,color] duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-cyan-300" />}
               </div>
               <p className="mt-10 font-mono text-xs uppercase tracking-widest text-slate-400">{it.label}</p>
-              <p className="mt-2 break-words text-lg text-white sm:text-xl">{it.value}</p>
+              <p className="mt-2 break-words text-base text-white xl:text-lg">{it.value}</p>
             </>
           );
           return (
             <Reveal key={it.id} delay={i * 0.06}>
               {it.href ? (
                 <a data-testid={`contact-${it.id}`} href={it.href} target={it.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer"
-                  className="group block h-full border-b border-white/10 py-8 transition-colors hover:bg-white/[0.02] sm:px-6 lg:border-r">
+                  className="group block h-full border-b border-white/10 py-8 transition-colors hover:bg-white/[0.02] sm:px-5 lg:border-r">
                   {inner}
                 </a>
               ) : (
-                <div data-testid={`contact-${it.id}`} className="h-full border-b border-white/10 py-8 sm:px-6">{inner}</div>
+                <div data-testid={`contact-${it.id}`} className="h-full border-b border-white/10 py-8 sm:px-5">{inner}</div>
               )}
             </Reveal>
           );
