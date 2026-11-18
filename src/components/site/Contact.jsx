@@ -5,10 +5,10 @@ import { Mark } from "./Mark";
 import { waLink, PHONE_LABEL, EMAIL, INSTAGRAM } from "@/lib/site";
 
 const ITEMS = [
-  { id: "whatsapp", icon: MessageCircle, label: "WhatsApp", value: PHONE_LABEL, href: waLink("Olá, Tecnoguard!") },
-  { id: "tecnica", icon: Wrench, label: "Área Técnica", value: "(49) 99926-0800", href: "https://wa.me!" },
-  { id: "financeiro", icon: Receipt, label: "Financeiro", value: "(49) 99114-5806", href: "https://wa.me!" },
-  { id: "instagram", icon: Instagram, label: "Instagram", value: `@${INSTAGRAM}`, href: `https://instagram.com/${INSTAGRAM}` },
+  { id: "whatsapp", icon: MessageCircle, label: "Orçamentos", value: PHONE_LABEL, href: waLink("Olá, Tecnoguard! Gostaria de solicitar um orçamento.") },
+  { id: "tecnica", icon: Wrench, label: "Área Técnica", value: "(49) 99926-0800", href: "https://wa.me" + "5549999260800" },
+  { id: "financeiro", icon: Receipt, label: "Financeiro", value: "(49) 99114-5806", href: "https://wa.me" + "5549991145806" },
+  { id: "instagram", icon: Instagram, label: "Instagram", value: `@${INSTAGRAM}`, href: `https://instagram.com{INSTAGRAM}` },
   { id: "email", icon: Mail, label: "E-mail", value: EMAIL, href: `mailto:${EMAIL}` },
   { id: "local", icon: MapPin, label: "Atendimento", value: "Chapecó — SC e região", href: null },
 ];
@@ -60,3 +60,4 @@ export const Contact = () => (
     </div>
   </footer>
 );
+
