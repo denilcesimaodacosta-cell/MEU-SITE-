@@ -4,24 +4,10 @@ import { Reveal, Overline } from "./Reveal";
 import { Mark } from "./Mark";
 import { PHONE_LABEL, EMAIL, INSTAGRAM } from "@/lib/site";
 
-const MSG_BOAS_VINDAS = encodeURIComponent(
-  "👋 Olá! Seja muito bem-vindo(a) à TecnoGuard Manutenções e Instalações! 🔵🛡️\n\n" +
-  "Agradecemos por entrar em contato! Será um prazer atender você.\n\n" +
-  "🔧 Conheça nossos serviços:\n\n" +
-  "📹 Instalação e manutenção de câmeras de segurança;\n" +
-  "🚨 Instalação e manutenção de sistemas de alarme;\n" +
-  "🌐 Instalação e manutenção de redes;\n" +
-  "⚙️ Manutenções preventivas e corretivas.\n\n" +
-  "Nosso compromisso é oferecer soluções eficientes, qualidade e segurança, sempre buscando proteger o que é mais importante para você e seu negócio!\n\n" +
-  "💬 Conte-nos: como podemos ajudar?\n\n" +
-  "Em breve, nossa equipe dará continuidade ao seu atendimento.\n\n" +
-  "🤝 TecnoGuard – Tecnologia, segurança e confiança em cada serviço! 🔵🛡️"
-);
-
 const ITEMS = [
-  { id: "whatsapp", icon: MessageCircle, label: "Orçamentos", value: PHONE_LABEL, href: "https://wa.me" + "/5549989027059?text=" + MSG_BOAS_VINDAS },
-  { id: "tecnica", icon: Wrench, label: "Área Técnica", value: "(49) 99926-0800", href: "https://wa.me" + "/5549999260800?text=" + MSG_BOAS_VINDAS },
-  { id: "financeiro", icon: Receipt, label: "Financeiro", value: "(49) 99114-5806", href: "https://wa.me" + "/5549991145806?text=" + MSG_BOAS_VINDAS },
+  { id: "whatsapp", icon: MessageCircle, label: "Orçamentos", value: PHONE_LABEL, href: "https://wa.me" + "/5549989027059?text=" + encodeURIComponent("Olá, Tecnoguard! Gostaria de solicitar um orçamento.") },
+  { id: "tecnica", icon: Wrench, label: "Área Técnica", value: "(49) 99926-0800", href: "https://wa.me" + "/5549999260800?text=" + encodeURIComponent("Olá, Tecnoguard! Preciso de suporte da Área Técnica.") },
+  { id: "financeiro", icon: Receipt, label: "Financeiro", value: "(49) 99114-5806", href: "https://wa.me" + "/5549991145806?text=" + encodeURIComponent("Olá, Tecnoguard! Gostaria de falar com o Financeiro.") },
   { id: "instagram", icon: Instagram, label: "Instagram", value: `@${INSTAGRAM}`, href: `https://instagram.com{INSTAGRAM}` },
   { id: "email", icon: Mail, label: "E-mail", value: EMAIL, href: `mailto:${EMAIL}` },
   { id: "local", icon: MapPin, label: "Atendimento", value: "Chapecó — SC e região", href: null },
