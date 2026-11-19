@@ -5,6 +5,7 @@ import { Nav } from "@/components/site/Nav";
 import { Hero } from "@/components/site/Hero";
 import { Marquee } from "@/components/site/Marquee";
 import { Services } from "@/components/site/Services";
+import { Portfolio } from "@/components/site/Portfolio";
 import { Process } from "@/components/site/Process";
 import { Booking } from "@/components/site/Booking";
 import { Contact } from "@/components/site/Contact";
@@ -35,6 +36,7 @@ export default function Home() {
         <Hero />
         <Marquee />
         <Services onBook={onBook} />
+        <Portfolio />
         <Process />
         <Booking preset={preset} />
       </main>
